@@ -41,7 +41,7 @@ try {
         // Consultar empleado por ID
         $resultado = $empleadoController->show($_GET["consultar"]);
         echo json_encode($resultado ?: ["success" => 0]);
-    } elseif ($_SERVER['REQUEST_METHOD'] === "GET" && isset($_GET["borrar"])) {
+    } elseif ($_SERVER['REQUEST_METHOD'] === "DELETE" && isset($_GET["borrar"])) {
         // Borrar empleado (idealmente, usar el método DELETE)
         $resultado = $empleadoController->delete($_GET["borrar"]);
         echo json_encode(["success" => $resultado ? 1 : 0]);
