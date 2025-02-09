@@ -1,3 +1,13 @@
+# Standard .gitignore file for a PHP project
+# This configuration excludes:
+# - Environment configuration files
+# - Package dependencies
+# - IDE configuration files
+# - Operating system generated files
+# - Log files
+# - PHP temporary files and backups
+#
+# Use this file to keep sensitive data and unnecessary files out of version control
 # Environment files
 .env
 .env.local

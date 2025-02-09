@@ -1,3 +1,11 @@
+# Git attributes configuration file
+# This file controls how Git handles line endings and file types
+#
+# Main settings:
+# - Enables automatic text file detection and line ending normalization
+# - Forces PHP, JSON, Markdown and env files to use LF (Unix-style) line endings
+# - Helps maintain consistency across different operating systems
+# - Prevents issues with line ending differences in team development
 # Auto detect text files and perform LF normalization
 * text=auto
 

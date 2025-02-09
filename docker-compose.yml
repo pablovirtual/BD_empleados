@@ -1,3 +1,29 @@
+# Docker Compose configuration for PHP/MySQL application
+#
+# Services:
+# - web: PHP web application container
+#   - Builds from Dockerfile in current directory
+#   - Maps port 80 to host
+#   - Uses environment variables for DB connection
+#   - Mounts current directory to container web root
+#   - Depends on db service
+#
+# - db: MySQL 8.0 database container  
+#   - Uses environment variables for initial setup
+#   - Maps port 3306 to host
+#   - Persists data using named volume
+#
+# Networks:
+# - app-network: Bridge network for container communication
+#
+# Volumes:
+# - dbdata: Persistent storage for MySQL data
+#
+# Environment variables required:
+# - DB_HOST: Database hostname
+# - DB_USER: Database username
+# - DB_PASSWORD: Database password  
+# - DB_NAME: Database name
 version: '3'
 services:
   web:

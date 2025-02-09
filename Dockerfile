@@ -1,3 +1,23 @@
+# Dockerfile para una aplicación PHP con Apache
+#
+# Este Dockerfile configura un entorno para ejecutar una aplicación PHP 8.0 con Apache.
+# Incluye:
+# - PHP 8.0 con Apache
+# - Extensiones PHP comunes (mysqli, pdo, zip, intl)
+# - Composer para gestión de dependencias
+# - Git y utilidades zip
+# 
+# El contenedor:
+# - Usa la imagen base php:8.0-apache
+# - Instala dependencias del sistema y extensiones PHP necesarias
+# - Configura Apache con mod_rewrite
+# - Copia los archivos del proyecto y configura permisos
+# - Instala dependencias via Composer
+# - Expone el puerto 80 para acceso web
+#
+# Uso:
+# 1. Construir: docker build -t my-php-app .
+# 2. Ejecutar: docker run -p 80:80 my-php-app
 FROM php:8.0-apache
 
 # Instalar dependencias del sistema
