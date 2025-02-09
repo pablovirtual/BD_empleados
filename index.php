@@ -1,32 +1,3 @@
-/**
- * API REST para gestión de empleados
- * 
- * Este archivo maneja las operaciones CRUD para empleados a través de endpoints REST.
- * Utiliza variables de entorno para la configuración de la base de datos.
- * 
- * Endpoints disponibles:
- * - GET /?consultar={id}  : Obtiene un empleado por ID
- * - GET /                 : Lista todos los empleados
- * - POST /?insertar=1     : Crea un nuevo empleado
- * - PUT /?actualizar={id} : Actualiza un empleado existente
- * - DELETE /?borrar={id}  : Elimina un empleado
- * 
- * Headers CORS configurados para permitir acceso desde cualquier origen
- * 
- * Formato de datos esperado para POST/PUT:
- * {
- *   "nombre": "string",
- *   "correo": "string"
- * }
- * 
- * Respuestas:
- * - Éxito: {"success": 1} 
- * - Error: {"success": 0} o {"error": "mensaje"}
- * 
- * @requires PHP >= 7.0
- * @requires mysqli
- * @requires dotenv
- */
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -35,12 +6,11 @@ $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: access");
-header("Access-Control-Allow-Methods: GET,POST,DELETE,PUT");
+header("Access-Control-Allow-Headers: access, Content-Type, Authorization, X-Requested-With");
+header("Access-Control-Allow-Methods: GET, POST, DELETE, PUT, OPTIONS");
 header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-// Handle preflight OPTIONS request
+// Manejar petición preflight OPTIONS
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     header("HTTP/1.1 200 OK");
     exit();
@@ -67,15 +37,15 @@ try {
     $empleadoController = new EmpleadoController($conexionBD);
 
     // Router básico
-    if (isset($_GET["consultar"])) {
+    if ($_SERVER['REQUEST_METHOD'] === "GET" && isset($_GET["consultar"])) {
         // Consultar empleado por ID
         $resultado = $empleadoController->show($_GET["consultar"]);
         echo json_encode($resultado ?: ["success" => 0]);
-    } elseif (isset($_GET["borrar"])) {
-        // Borrar empleado
+    } elseif ($_SERVER['REQUEST_METHOD'] === "GET" && isset($_GET["borrar"])) {
+        // Borrar empleado (idealmente, usar el método DELETE)
         $resultado = $empleadoController->delete($_GET["borrar"]);
         echo json_encode(["success" => $resultado ? 1 : 0]);
-    } elseif (isset($_GET["insertar"])) {
+    } elseif ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_GET["insertar"])) {
         // Insertar empleado
         $data = json_decode(file_get_contents("php://input"));
         if (!empty($data->nombre) && !empty($data->correo)) {
@@ -84,11 +54,11 @@ try {
         } else {
             throw new Exception("Nombre y correo son requeridos");
         }
-    } elseif (isset($_GET["actualizar"])) {
+    } elseif ($_SERVER['REQUEST_METHOD'] === "PUT" && isset($_GET["actualizar"])) {
         // Actualizar empleado
         $data = json_decode(file_get_contents("php://input"));
         if (!empty($data->nombre) && !empty($data->correo)) {
-            $id = isset($data->id) ? $data->id : $_GET["actualizar"];
+            $id = $_GET["actualizar"];
             $resultado = $empleadoController->update($id, $data);
             echo json_encode(["success" => $resultado ? 1 : 0]);
         } else {
